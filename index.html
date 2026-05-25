@@ -1,0 +1,488 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:13px;color:var(--color-text-primary)}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:10px}
+.hdr-title{font-size:15px;font-weight:500}
+.hdr-sub{font-size:11px;color:var(--color-text-secondary)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--color-text-secondary);margin-right:4px;vertical-align:middle}
+.dot.on{background:#4caf7d}
+.api-row{display:flex;gap:7px;align-items:center;padding:9px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:10px;flex-wrap:wrap}
+.api-row label{font-size:11px;color:var(--color-text-secondary);white-space:nowrap;font-weight:500}
+.api-row input{flex:1;min-width:160px;font-family:var(--font-mono);font-size:11px;padding:5px 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);outline:none}
+#ki{font-size:11px;color:var(--color-text-secondary);white-space:nowrap}
+#tm{font-size:11px;white-space:nowrap}
+.btn{padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-primary);cursor:pointer;font-size:11px;font-family:var(--font-sans);white-space:nowrap}
+.btn:hover{background:var(--color-background-secondary)}
+.btn.dk{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.btn.dk:hover{opacity:0.85}
+.btn.bl{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.btn.gn{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.btn:disabled{opacity:0.35;cursor:not-allowed}
+.uz{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:22px 14px;text-align:center;margin-bottom:10px;cursor:pointer}
+.uz:hover{border-color:var(--color-border-primary)}
+.uz p{color:var(--color-text-secondary);font-size:11px;margin-top:5px}
+.tabs{display:flex;gap:3px;flex-wrap:wrap}
+.tab{padding:4px 11px;border-radius:6px 6px 0 0;border:0.5px solid var(--color-border-tertiary);border-bottom:none;font-size:11px;cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-secondary)}
+.tab.on{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500}
+.panel{border:0.5px solid var(--color-border-tertiary);border-radius:0 var(--border-radius-lg) var(--border-radius-lg) var(--border-radius-lg);overflow:hidden}
+.ptop{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap;gap:7px}
+.ptop b{font-size:13px;font-weight:500}
+.acts{display:flex;gap:5px;flex-wrap:wrap}
+.stats{display:flex;gap:16px;padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);flex-wrap:wrap}
+.sv{font-size:17px;font-weight:500}.sl{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em}
+.sv.A{color:var(--color-text-success)}.sv.CA{color:var(--color-text-warning)}.sv.R{color:var(--color-text-danger)}
+.leg{display:flex;gap:12px;padding:7px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:10px;flex-wrap:wrap;align-items:center}
+.lb{display:inline-flex;align-items:center;gap:4px}
+.lbox{width:10px;height:10px;border-radius:2px;display:inline-block}
+.prog{height:2px;background:var(--color-background-secondary)}
+.pb{height:100%;background:var(--color-text-primary);transition:width .25s;width:0}
+.tw{overflow-x:auto;max-height:500px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead th{padding:6px 8px;text-align:left;border-bottom:0.5px solid var(--color-border-tertiary);border-right:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);font-weight:500;font-size:10px;white-space:nowrap;background:var(--color-background-secondary);position:sticky;top:0;z-index:1}
+tbody td{padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary);border-right:0.5px solid var(--color-border-tertiary);vertical-align:middle;white-space:nowrap;font-size:11px}
+tbody tr:hover td{background:var(--color-background-secondary)}
+th.ac,td.ac{background:var(--color-background-info) !important}
+th.cc,td.cc{background:var(--color-background-warning) !important}
+.sc{font-family:var(--font-mono);font-size:10px;line-height:1.75}
+.s0{color:var(--color-text-primary);font-weight:500}
+.s1{color:var(--color-text-info)}
+.s2{color:var(--color-text-success)}
+.vf{display:inline-block;font-size:8px;padding:1px 3px;border-radius:3px;background:var(--color-background-warning);color:var(--color-text-warning);font-weight:600;margin-left:2px}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500;font-family:var(--font-mono)}
+.pill.A{background:var(--color-background-success);color:var(--color-text-success)}
+.pill.CA{background:var(--color-background-warning);color:var(--color-text-warning)}
+.pill.R{background:var(--color-background-danger);color:var(--color-text-danger)}
+.pill.p{background:var(--color-background-secondary);color:var(--color-text-secondary);font-style:italic}
+select{border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:3px 5px;font-size:11px;font-family:var(--font-mono);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;min-width:80px}
+.sp{display:inline-block;width:10px;height:10px;border:2px solid transparent;border-top-color:currentColor;border-radius:50%;animation:sp .6s linear infinite;vertical-align:-1px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{padding:36px;text-align:center;color:var(--color-text-secondary);font-size:12px}
+.dim{color:var(--color-text-secondary)}
+</style>
+
+<div class="hdr">
+  <div><div class="hdr-title">SOE Admissions Agent</div><div class="hdr-sub">LAU School of Engineering</div></div>
+  <span style="font-size:11px;color:var(--color-text-secondary)"><span class="dot" id="dot"></span><span id="ast">No key</span></span>
+</div>
+
+<div class="api-row">
+  <label>API Key</label>
+  <input type="password" id="apiIn" placeholder="sk-ant-..." autocomplete="off" oninput="onKI()">
+  <span id="ki"></span>
+  <button class="btn dk" onclick="saveKey()">Save</button>
+  <button class="btn bl" id="tb" onclick="testKey()">Test key</button>
+  <span id="tm"></span>
+</div>
+
+<div class="uz" ondragover="event.preventDefault()" ondrop="drop(event)" onclick="document.getElementById('fi').click()">
+  <button class="btn dk" onclick="event.stopPropagation();document.getElementById('fi').click()">Upload Excel files</button>
+  <p>Drop .xlsx files -- all sheet types supported (NEW, TRANSFER, CA, Gray...)</p>
+  <input type="file" id="fi" accept=".xlsx,.xls" multiple style="display:none" onchange="loadFiles(this.files)">
+</div>
+
+<div id="app" style="display:none">
+  <div class="tabs" id="tabBar"></div>
+  <div class="panel">
+    <div class="ptop">
+      <b id="pTitle">Applicants</b>
+      <div class="acts">
+        <button class="btn" onclick="document.getElementById('fi').click()">+ Add file</button>
+        <button class="btn dk" id="runBtn" onclick="runAgent()">&#9654; Run Agent</button>
+        <button class="btn gn" onclick="exportExcel()">&#8681; Download Excel</button>
+        <button class="btn" onclick="exportPDF()">&#8681; PDF</button>
+      </div>
+    </div>
+    <div class="leg">
+      <span style="color:var(--color-text-secondary);font-weight:500;font-size:11px">Legend:</span>
+      <span class="lb"><span class="lbox" style="background:var(--color-background-info)"></span><span>Agent fills (Final Decisions + Notes 2)</span></span>
+      <span class="lb"><span class="lbox" style="background:var(--color-background-warning)"></span><span>Committee fills</span></span>
+    </div>
+    <div class="stats">
+      <div><div class="sv A" id="cA">0</div><div class="sl">Admit</div></div>
+      <div><div class="sv CA" id="cCA">0</div><div class="sl">Cond. Admit</div></div>
+      <div><div class="sv R" id="cR">0</div><div class="sl">Rejected</div></div>
+      <div><div class="sv" style="color:var(--color-text-secondary)" id="cP">0</div><div class="sl">Pending</div></div>
+      <div><div class="sv" style="color:var(--color-text-warning)" id="cV">0</div><div class="sl">Verify scale</div></div>
+    </div>
+    <div class="prog"><div class="pb" id="pb"></div></div>
+    <div class="tw" id="tw"><div class="empty">Press <strong>Run Agent</strong> to analyse applicants.</div></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+let apiKey='';
+let tabs=[];
+let cur=0;
+
+const RULES=`You are the SOE Admissions Expert at LAU (Lebanese American University).
+FRB MATH-PHY/CHM: A if Math>=12/20 AND Phy>=12/20. CA if one subject 10-12/20. R if Math<10/20 or Phy<9/20.
+FRB MATH-Numerique/Informatique: CA at best, never A. R if Math<10/20.
+FRB MATH-SVT/SES/Economics: CA if Physics>=12/20 AND Math>=12/20. R if Physics absent or <10/20.
+FRB MATH-Literature/MATH-LANGUAGE/PHY-CHM-Literature/SVT-PHY-CHM/SES-ENGLISH: R.
+FRB MATH-SES with Language specialty: R.
+IB: Math MUST be HL. SL Math = R immediately. HL MATH+PHY = A if grades passing. HL PHY/SL MATH = R.
+LEB GS/LS: A if Math+Phy>=12/20. CA if borderline 10-12/20. R if very weak.
+GCE A-Levels Math+Physics = A. No Physics = R. Borderline = CA.
+LEB ES: R -- not directly eligible.
+Transfers: GPA>=2.0/4 or >=70/100 = A. Below = R. 60-70/100 = CA.
+SAT>=600 positive signal only, never rejection reason. Passing=60/100=12/20.
+Output ONLY valid JSON: {"decision":"A|CA|R","reason":"2-3 sentences citing grades and rule","flag":"concern or null","remedial":"courses if CA else null","sat_note":"if SAT helps else null"}`;
+
+function onKI(){
+  const r=document.getElementById('apiIn').value,t=r.trim();
+  const el=document.getElementById('ki');
+  if(!t){el.textContent='';return;}
+  el.textContent=t.length+' chars'+(r!==t?' -- spaces will be trimmed':'');
+  el.style.color=r!==t?'var(--color-text-warning)':'var(--color-text-secondary)';
+}
+function saveKey(){
+  apiKey=document.getElementById('apiIn').value.trim();
+  document.getElementById('apiIn').value=apiKey;
+  setSt(!!apiKey);onKI();
+}
+function setSt(ok){
+  document.getElementById('dot').className='dot'+(ok?' on':'');
+  document.getElementById('ast').textContent=ok?'Key set':'No key';
+}
+async function testKey(){
+  const k=document.getElementById('apiIn').value.trim();
+  const msg=document.getElementById('tm');
+  if(!k){msg.textContent='Paste a key first';msg.style.color='var(--color-text-warning)';return;}
+  const btn=document.getElementById('tb');
+  btn.disabled=true;btn.innerHTML='<span class="sp"></span>';msg.textContent='';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:5,messages:[{role:'user',content:'hi'}]})
+    });
+    const d=await r.json();
+    if(d.error){msg.textContent='Failed: '+d.error.message;msg.style.color='var(--color-text-danger)';}
+    else{apiKey=k;document.getElementById('apiIn').value=k;setSt(true);onKI();msg.textContent='Key works!';msg.style.color='var(--color-text-success)';}
+  }catch(e){msg.textContent='Network error';msg.style.color='var(--color-text-danger)';}
+  btn.disabled=false;btn.textContent='Test key';
+}
+
+function drop(e){e.preventDefault();loadFiles(e.dataTransfer.files);}
+function loadFiles(files){
+  Array.from(files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      const wb=XLSX.read(ev.target.result,{type:'array'});
+      wb.SheetNames.forEach(sn=>{
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{defval:''});
+        if(!rows.length)return;
+        const u=sn.toUpperCase();
+        const st=u.includes('TRANSFER')||u.includes('TR')?'transfer':'new';
+        const label=f.name.replace(/Copy_of_/i,'').replace(/\.xlsx?$/i,'').slice(0,20)+'/'+sn;
+        // Store original column order exactly as in the file
+        const colOrder=Object.keys(rows[0]);
+        tabs.push({label,st,fileName:f.name,sheetName:sn,rows,colOrder,
+          decs:rows.map(()=>({rec:null,reason:'',flag:null,remedial:null,sat_note:null,override:null}))});
+      });
+      refresh();
+    };
+    r.readAsArrayBuffer(f);
+  });
+  document.getElementById('fi').value='';
+}
+
+function refresh(){
+  if(!tabs.length)return;
+  document.querySelector('.uz').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('tabBar').innerHTML=tabs.map((t,i)=>
+    `<div class="tab ${i===cur?'on':''}" onclick="sw(${i},this)">${t.label} (${t.rows.length})</div>`).join('');
+  render();calcStats();
+}
+function sw(i,el){
+  cur=i;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('pTitle').textContent=tabs[i].label;
+  render();calcStats();
+}
+
+// Get value from row by fuzzy column name
+function cv(row,...keys){
+  for(const k of keys){
+    const n=k.toLowerCase().replace(/[\s_\-\.]/g,'');
+    const f=Object.keys(row).find(c=>c.toLowerCase().replace(/[\s_\-\.]/g,'').includes(n));
+    if(f!==undefined&&row[f]!==''&&row[f]!==null&&String(row[f]).trim()!=='nan')return String(row[f]);
+  }
+  return'';
+}
+
+// Find exact column key
+function fk(co,...keys){
+  for(const k of keys){
+    const n=k.toLowerCase().replace(/[\s_\-\.]/g,'');
+    const f=co.find(c=>c.toLowerCase().replace(/[\s_\-\.]/g,'').includes(n));
+    if(f)return f;
+  }
+  return null;
+}
+
+// Grade parsing and display
+function pg(raw){
+  const s=String(raw||'').trim();
+  if(!s||s==='N/A'||s==='nan'||s===' ')return null;
+  const sl=s.match(/^([\d.]+)\s*\/\s*([\d.]+)$/);
+  if(sl){
+    const n=parseFloat(sl[1]),d=parseFloat(sl[2]);
+    if(isNaN(n)||isNaN(d)||d===0)return null;
+    const ratio=n/d,known=[20,40,50,60,80,90,100,110,120,160,320];
+    const nv=d===4||!known.includes(d);
+    return{orig:s,p100:d===4?null:Math.round(ratio*1000)/10,p20:d===4?null:Math.round(ratio*200)/10,nv};
+  }
+  const p=parseFloat(s);
+  if(!isNaN(p)){
+    if(p<=20)return{orig:s,p100:Math.round(p*50)/10,p20:p,nv:false};
+    if(p<=100)return{orig:s,p100:p,p20:Math.round(p*2)/10,nv:false};
+    return{orig:s,p100:null,p20:null,nv:true};
+  }
+  return{orig:s,p100:null,p20:null,nv:true};
+}
+function sh(raw){
+  const g=pg(raw);
+  if(!g)return'<span class="dim">--</span>';
+  const vb=g.nv?' <span class="vf">VERIFY</span>':'';
+  let h=`<div class="sc"><div class="s0">${g.orig}${vb}</div>`;
+  if(g.p100!==null)h+=`<div class="s1">${g.p100.toFixed(1)}/100</div>`;
+  if(g.p20!==null)h+=`<div class="s2">${g.p20.toFixed(1)}/20</div>`;
+  return h+'</div>';
+}
+function st(raw){
+  const g=pg(raw);if(!g)return'--';
+  let t=g.orig;
+  if(g.p100!==null)t+=` | ${g.p100.toFixed(1)}/100`;
+  if(g.p20!==null)t+=` | ${g.p20.toFixed(1)}/20`;
+  if(g.nv)t+=' [VERIFY]';
+  return t;
+}
+
+// Determine if a column contains grade data (for scale display)
+function isGradeCol(colName){
+  const c=colName.toLowerCase();
+  return(c.includes('math')||c.includes('phy')||c.includes('chem')||c.includes('avg'))
+    &&!c.includes('date')&&!c.includes('note')&&!c.includes('misc');
+}
+
+// Build Claude prompt
+function buildPrompt(row,sheetType){
+  const bacc=cv(row,'bacctype','bacc');
+  const bu=bacc.toUpperCase();
+  let ibLine='';
+  if(bu.includes('IBD')||bu.match(/\bIB[D:]/)){
+    const m=bu.match(/HL\s*[:\-]\s*([^/\n;]+)/);
+    ibLine=m?(m[1].includes('MATH')?'IB HL Math: PASS':'IB HL Math: FAIL -- must reject'):'IB HL: unreadable';
+  }
+  const satM=cv(row,'satm','sat-m'),satE=cv(row,'saterw','sat-erw'),satT=cv(row,'sattotal','sat-total');
+  const sat=(satM||satE||satT)?`SAT Math:${satM||'N/A'} ERW:${satE||'N/A'} Total:${satT||'N/A'}`:'SAT: not provided';
+  if(sheetType==='transfer')return`TRANSFER:
+ID:${cv(row,'id')} Univ:${cv(row,'university','univ')} OldMajor:${cv(row,'oldmajor','old')}
+GPA:${cv(row,'gpa','avg')} Credits:${cv(row,'credits','cr')} Major:${cv(row,'major1','major')}
+Bacc:${bacc} Avg11:${st(cv(row,'avg11'))} Math11:${st(cv(row,'math11'))} Phy11:${st(cv(row,'phy11'))}
+BaccAvg:${st(cv(row,'baccavg','avgbacc'))} BaccMath:${st(cv(row,'baccmath'))}
+Notes:${[cv(row,'note1','note_1'),cv(row,'note2','note_2','notes2')].filter(Boolean).join(' | ')||'none'}`;
+  return`NEW:
+ID:${cv(row,'idnumber','id')} Major:${cv(row,'major','major1')} HS:${cv(row,'highschool','school')} Campus:${cv(row,'campus')}
+Bacc:${bacc} Specialty:${cv(row,'specialty','spec')}
+PassGr11:${cv(row,'passinggrade11','passing','grade11')} PassGr10:${cv(row,'passinggrade10','grade10')}
+Avg11:${st(cv(row,'avg11','avg-11'))} Avg10:${st(cv(row,'avg10','avg-10'))}
+Math11:${st(cv(row,'math11','math-11'))} Math10:${st(cv(row,'math10','math-10'))}
+Phy11:${st(cv(row,'phy11','phy-11'))} Phy10:${st(cv(row,'phy10','phy-10'))}
+Chem11:${st(cv(row,'chem11','chem-11'))}
+BaccAvg:${st(cv(row,'avgbacc','baccavg'))} BaccMath:${st(cv(row,'baccmath','mathbacc'))} BaccPhy:${st(cv(row,'baccphy','baccphys'))} BaccChem:${st(cv(row,'backchem','chembacc'))}
+${sat}
+${ibLine}
+Notes:${[cv(row,'note1','note_1'),cv(row,'note2','note_2','notes2'),cv(row,'remedial')].filter(Boolean).join(' | ')||'none'}`;
+}
+
+async function callClaude(p){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:RULES,messages:[{role:'user',content:p}]})
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message);
+  const txt=d.content[0].text.trim().replace(/```json|```/g,'').trim();
+  try{return JSON.parse(txt);}
+  catch(e){
+    const m=txt.match(/"decision"\s*:\s*"([^"]+)"/);
+    return{decision:m?m[1]:'?',reason:txt.slice(0,120),flag:'parse error',remedial:null,sat_note:null};
+  }
+}
+
+async function runAgent(){
+  if(!apiKey){alert('Save and test your API key first.');return;}
+  const tab=tabs[cur];if(!tab)return;
+  const btn=document.getElementById('runBtn');
+  btn.disabled=true;btn.innerHTML='<span class="sp"></span> Analysing...';
+  const bar=document.getElementById('pb');
+  for(let i=0;i<tab.rows.length;i++){
+    try{
+      const res=await callClaude(buildPrompt(tab.rows[i],tab.st));
+      tab.decs[i]={...tab.decs[i],rec:res.decision,reason:res.reason,flag:res.flag||null,remedial:res.remedial||null,sat_note:res.sat_note||null};
+    }catch(e){
+      tab.decs[i]={...tab.decs[i],rec:'?',reason:'Error: '+e.message,flag:'API error'};
+    }
+    bar.style.width=Math.round(((i+1)/tab.rows.length)*100)+'%';
+    render();calcStats();
+    await new Promise(r=>setTimeout(r,200));
+  }
+  bar.style.width='0%';
+  btn.disabled=false;btn.innerHTML='&#9654; Re-run';
+}
+
+function pill(v){
+  const c=['A','CA','R'].includes(v)?v:'p';
+  return`<span class="pill ${c}">${v||'pending'}</span>`;
+}
+
+// THE KEY FUNCTION: render table in exact original column order
+// Only two columns get agent content: Final Decisions and Notes 2
+// All other columns show original data unchanged
+function render(){
+  const tab=tabs[cur];
+  if(!tab||!tab.rows.length){document.getElementById('tw').innerHTML='<div class="empty">No data.</div>';return;}
+
+  const co=tab.colOrder; // exact original column order
+  const finalDecKey=fk(co,'finaldecision','decision-la','decisionla');
+  const notes2Key=fk(co,'notes2','note2','note_2');
+  const remedialKey=fk(co,'remedialcourses','remedial');
+
+  // Build headers -- same order as original, nothing inserted or moved
+  let h='<table><thead><tr>';
+  h+='<th style="min-width:28px;position:sticky;left:0;z-index:2;background:var(--color-background-secondary)">#</th>';
+  co.forEach(col=>{
+    let cls='';
+    if(col===finalDecKey||col===notes2Key||col===remedialKey)cls=' class="ac"';
+    h+=`<th${cls}>${col}</th>`;
+  });
+  h+='</tr></thead><tbody>';
+
+  tab.rows.forEach((row,i)=>{
+    const d=tab.decs[i];
+    const agentDec=d.rec||'';
+    const reason=[d.reason,d.remedial?'Remedial: '+d.remedial:'',d.sat_note?d.sat_note:'',d.flag?'Flag: '+d.flag:''].filter(Boolean).join(' | ');
+
+    h+='<tr>';
+    h+=`<td style="font-family:var(--font-mono);font-size:10px;color:var(--color-text-secondary);position:sticky;left:0;background:var(--color-background-secondary)">${i+1}</td>`;
+
+    co.forEach(col=>{
+      if(col===finalDecKey){
+        // Agent decision -- pill + committee override dropdown on same cell
+        h+=`<td class="ac" style="white-space:nowrap">
+          ${pill(agentDec)}
+          <br>
+          <select onchange="setOv(${i},this.value)" style="margin-top:3px;font-size:10px">
+            <option value="">committee...</option>
+            <option value="A" ${d.override==='A'?'selected':''}>A</option>
+            <option value="CA" ${d.override==='CA'?'selected':''}>CA</option>
+            <option value="R" ${d.override==='R'?'selected':''}>R</option>
+          </select>
+          ${d.flag?'<br><span style="font-size:9px;color:var(--color-text-danger)">'+d.flag+'</span>':''}
+        </td>`;
+      } else if(col===notes2Key){
+        // Agent reason
+        h+=`<td class="ac" style="font-size:10px;color:var(--color-text-secondary);max-width:200px;white-space:normal;line-height:1.4">${reason||'<span class="dim">--</span>'}</td>`;
+      } else if(col===remedialKey){
+        // Remedial courses from agent
+        const remVal=d.remedial||String(row[col]||'');
+        h+=`<td class="ac" style="font-size:10px;color:var(--color-text-warning);white-space:normal;max-width:150px">${remVal||'<span class="dim">--</span>'}</td>`;
+      } else {
+        // ALL OTHER COLUMNS: original value, unchanged, in original position
+        const val=String(row[col]||'').trim();
+        const empty=!val||val==='nan';
+        if(!empty&&isGradeCol(col)){
+          h+=`<td>${sh(val)}</td>`;
+        } else {
+          h+=`<td style="max-width:130px;overflow:hidden;text-overflow:ellipsis">${empty?'<span class="dim">--</span>':val}</td>`;
+        }
+      }
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  document.getElementById('tw').innerHTML=h;
+}
+
+function setOv(i,v){tabs[cur].decs[i].override=v||null;calcStats();}
+
+function calcStats(){
+  const tab=tabs[cur];if(!tab)return;
+  let A=0,CA=0,R=0,P=0,V=0;
+  tab.decs.forEach((d,i)=>{
+    const f=d.override||d.rec;
+    if(f==='A')A++;else if(f==='CA')CA++;else if(f==='R')R++;else P++;
+    const m=pg(cv(tab.rows[i],'math11','math-11'));
+    const p2=pg(cv(tab.rows[i],'phy11','phy-11'));
+    if((m&&m.nv)||(p2&&p2.nv))V++;
+  });
+  document.getElementById('cA').textContent=A;
+  document.getElementById('cCA').textContent=CA;
+  document.getElementById('cR').textContent=R;
+  document.getElementById('cP').textContent=P;
+  document.getElementById('cV').textContent=V;
+}
+
+// Export: exact original column order, only Final Decisions and Notes 2 are updated
+function exportExcel(){
+  const tab=tabs[cur];
+  if(!tab||!tab.rows.length)return;
+  const co=tab.colOrder;
+  const finalDecKey=fk(co,'finaldecision','decision-la','decisionla');
+  const notes2Key=fk(co,'notes2','note2','note_2');
+  const remedialKey=fk(co,'remedialcourses','remedial');
+
+  const out=tab.rows.map((row,i)=>{
+    const d=tab.decs[i];
+    const finalDec=d.override||d.rec||'';
+    const reason=[d.reason,d.sat_note||'',d.flag?'Flag: '+d.flag:''].filter(Boolean).join(' | ');
+    const outRow={};
+    // Write columns in exact original order
+    co.forEach(col=>{
+      if(col===finalDecKey)       outRow[col]=finalDec;
+      else if(col===notes2Key)    outRow[col]=reason;
+      else if(col===remedialKey)  outRow[col]=d.remedial||row[col]||'';
+      else                        outRow[col]=row[col];
+    });
+    return outRow;
+  });
+
+  const wb=XLSX.utils.book_new();
+  // Pass exact header order to preserve column sequence
+  const ws=XLSX.utils.json_to_sheet(out,{header:co});
+  XLSX.utils.book_append_sheet(wb,ws,tab.sheetName||'Sheet');
+  XLSX.writeFile(wb,tab.fileName.replace(/Copy_of_/i,'').replace(/\.xlsx?$/i,'')+'_decisions_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+function exportPDF(){
+  const tab=tabs[cur];if(!tab||!tab.rows.length)return;
+  const isNew=tab.st!=='transfer';
+  const date=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  function s(raw){const g=pg(raw);if(!g)return'--';let t=g.orig;if(g.p100!==null)t+=` / ${g.p100.toFixed(1)}/100`;if(g.p20!==null)t+=` / ${g.p20.toFixed(1)}/20`;return t;}
+  let html=`<html><head><style>body{font-family:Georgia,serif;font-size:10px;padding:20px}h1{font-size:14px;margin-bottom:3px}.sub{color:#666;font-size:9px;margin-bottom:12px}table{width:100%;border-collapse:collapse;font-size:9px}th{background:#1a1814;color:#fff;padding:4px 5px;text-align:left}td{padding:3px 5px;border-bottom:1px solid #ddd;vertical-align:top}tr:nth-child(even) td{background:#f9f9f9}.A{color:#2d6a4f;font-weight:bold}.CA{color:#92610a;font-weight:bold}.R{color:#8b2020;font-weight:bold}</style></head><body>`;
+  html+=`<h1>SOE Admissions -- ${tab.label}</h1><div class="sub">${date} | ${tab.rows.length} applicants</div>`;
+  html+='<table><thead><tr><th>#</th><th>ID</th><th>Major</th><th>Bacc Type</th>';
+  if(isNew)html+='<th>Math-11</th><th>Phy-11</th><th>Avg-11</th><th>SAT-M</th>';
+  else html+='<th>University</th><th>GPA</th>';
+  html+='<th>Final Decisions (agent)</th><th>Committee</th><th>Notes 2 (reason)</th></tr></thead><tbody>';
+  tab.rows.forEach((row,i)=>{
+    const d=tab.decs[i];
+    const fin=d.override||d.rec||'--';
+    const agc=d.rec||'';
+    const reason=[d.reason,d.remedial?'Remedial: '+d.remedial:''].filter(Boolean).join(' | ');
+    html+=`<tr><td>${i+1}</td><td>${cv(row,'idnumber','id')}</td><td>${cv(row,'major','major1')}</td><td>${cv(row,'bacctype','bacc')}</td>`;
+    if(isNew){html+=`<td>${s(cv(row,'math11','math-11'))}</td><td>${s(cv(row,'phy11','phy-11'))}</td><td>${s(cv(row,'avg11','avg-11'))}</td><td>${cv(row,'satm','sat-m')||'--'}</td>`;}
+    else{html+=`<td>${cv(row,'university','univ')}</td><td>${s(cv(row,'gpa','avg'))}</td>`;}
+    html+=`<td class="${agc}">${d.rec||'--'}</td><td class="${['A','CA','R'].includes(fin)?fin:''}">${fin}</td><td>${reason}</td></tr>`;
+  });
+  html+='</tbody></table></body></html>';
+  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);
+}
+</script>
